@@ -18,6 +18,7 @@
 		AADEB93E1C09C2FE0068342F /* PLCLocationHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = AADEB93D1C09C2FE0068342F /* PLCLocationHelper.m */; };
 		AADEB9431C09C5A20068342F /* PLCPlace.m in Sources */ = {isa = PBXBuildFile; fileRef = AADEB9421C09C5A20068342F /* PLCPlace.m */; };
 		AADEB9461C09C5E80068342F /* PLCPlaceMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = AADEB9451C09C5E80068342F /* PLCPlaceMapper.m */; };
+		ABAB6E4F1C126C1700EDAA52 /* ResultTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ABAB6E4E1C126C1700EDAA52 /* ResultTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,8 @@
 		AADEB9421C09C5A20068342F /* PLCPlace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLCPlace.m; sourceTree = "<group>"; };
 		AADEB9441C09C5E80068342F /* PLCPlaceMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLCPlaceMapper.h; sourceTree = "<group>"; };
 		AADEB9451C09C5E80068342F /* PLCPlaceMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLCPlaceMapper.m; sourceTree = "<group>"; };
+		ABAB6E4D1C126C1700EDAA52 /* ResultTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultTableViewCell.h; sourceTree = "<group>"; };
+		ABAB6E4E1C126C1700EDAA52 /* ResultTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResultTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 				AADEB9301C09BE3A0068342F /* LaunchScreen.storyboard */,
 				AADEB9331C09BE3A0068342F /* Info.plist */,
 				AADEB9221C09BE3A0068342F /* Supporting Files */,
+				ABAB6E4D1C126C1700EDAA52 /* ResultTableViewCell.h */,
+				ABAB6E4E1C126C1700EDAA52 /* ResultTableViewCell.m */,
 			);
 			path = Places;
 			sourceTree = "<group>";
@@ -172,6 +177,7 @@
 				TargetAttributes = {
 					AADEB91E1C09BE3A0068342F = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = KW8XLSK27E;
 					};
 				};
 			};
@@ -246,6 +252,7 @@
 			files = (
 				AADEB93E1C09C2FE0068342F /* PLCLocationHelper.m in Sources */,
 				AADEB92A1C09BE3A0068342F /* ViewController.m in Sources */,
+				ABAB6E4F1C126C1700EDAA52 /* ResultTableViewCell.m in Sources */,
 				AADEB9271C09BE3A0068342F /* AppDelegate.m in Sources */,
 				AADEB9431C09C5A20068342F /* PLCPlace.m in Sources */,
 				AADEB9241C09BE3A0068342F /* main.m in Sources */,
@@ -361,10 +368,13 @@
 			baseConfigurationReference = 4E69C967180D72DB65FA41E4 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Places/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ITIS.Places;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -373,10 +383,13 @@
 			baseConfigurationReference = 46BF75841316F9BE5EE610AE /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Places/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ITIS.Places;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

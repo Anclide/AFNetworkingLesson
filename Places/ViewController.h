@@ -10,6 +10,8 @@
 
 @interface ViewController : UIViewController
 
+@property (nonatomic, weak) IBOutlet UISearchBar *placesSearchBar;
+@property (nonatomic, weak) IBOutlet UITableView *table;
 
 @end
 

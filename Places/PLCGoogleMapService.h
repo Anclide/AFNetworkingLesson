@@ -14,9 +14,13 @@ typedef void(^PLCFailureBlock)(NSError *);
 
 @interface PLCGoogleMapService : NSObject
 
-- (void)getPlacesNearCoordinate:(CLLocationCoordinate2D)location
-                        success:(PLCSuccessBlock)successBlock
-                        failure:(PLCFailureBlock)failure;
+- (void)getPlaceswithSearchRequest:(NSString*)searchRequest
+                           success:(PLCSuccessBlock)successBlock
+                           failure:(PLCFailureBlock)failure;
+
+- (void)getPhotoOfPlaceWithPhotoReference:(NSString *)photoReference
+                                  success:(PLCSuccessBlock)succeed
+                                  failure:(PLCFailureBlock)failure;
 
 
 @end

@@ -10,6 +10,7 @@
 #import <AFNetworking.h>
 #import "PLCLocationHelper.h"
 #import "PLCPlaceMapper.h"
+#import "ResultTableViewCell.h"
 
 NSString *const PLCGoogleBaseURL = @"https://maps.googleapis.com/maps/api/place/";
 NSString *const PLCGoogleAPIKey = @"AIzaSyBhpEhL8vvERVuY9ynrHuElB7kEKdWyiHI";
@@ -17,6 +18,7 @@ NSString *const PLCGoogleAPIKey = @"AIzaSyBhpEhL8vvERVuY9ynrHuElB7kEKdWyiHI";
 @interface PLCGoogleMapService()
 
 @property (nonatomic, strong) AFHTTPRequestOperationManager *requestManager;
+@property (nonatomic, strong) AFHTTPRequestOperationManager *imageRequestManager;
 
 @end
 
@@ -28,24 +30,37 @@ NSString *const PLCGoogleAPIKey = @"AIzaSyBhpEhL8vvERVuY9ynrHuElB7kEKdWyiHI";
     if (self) {
         NSURL *baseURL = [NSURL URLWithString:PLCGoogleBaseURL];
         _requestManager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:nil];
+        _imageRequestManager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:nil];
+        _imageRequestManager.responseSerializer = [AFImageResponseSerializer serializer];
     }
     return self;
 }
 
 
-- (void)getPlacesNearCoordinate:(CLLocationCoordinate2D)location
-                        success:(PLCSuccessBlock)successBlock
-                        failure:(PLCFailureBlock)failure {
+- (void)getPlaceswithSearchRequest:(NSString*)searchRequest
+                           success:(PLCSuccessBlock)successBlock
+                           failure:(PLCFailureBlock)failure {
     
     NSDictionary *params = @{
                              @"key": PLCGoogleAPIKey,
-                             @"location": stringFromCoordinate(location),
+                             @"query": searchRequest,
                              @"radius": @(1000)
                              };
     
     void(^success)(AFHTTPRequestOperation *, id) =
     ^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSMutableArray *placesModels = [NSMutableArray new];
+        
+        NSString *staus = responseObject[@"status"];
+        NSLog(@"%@", staus);
+        if (![staus isEqualToString:@"OK"]) {
+            if (failure) {
+                NSString *errorMessage = responseObject[@"error_message"];
+                NSDictionary *dict = @{@"localizedDescription": errorMessage};
+                NSError *error = [NSError errorWithDomain:@"PLCErrorDomain" code:-1 userInfo:dict];
+                failure(error);
+            }
+        } else {
         
         NSArray *results = responseObject[@"results"];
         if (results.count == 0) {
@@ -58,6 +73,43 @@ NSString *const PLCGoogleAPIKey = @"AIzaSyBhpEhL8vvERVuY9ynrHuElB7kEKdWyiHI";
         }
         if (successBlock) {
             successBlock([placesModels copy]);
+            }
+            
+        }
+        
+        
+    };
+    
+    void(^fail)(id, NSError *) = ^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+        NSLog(@"%@", error);
+    };
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self.requestManager GET:@"https://maps.googleapis.com/maps/api/place/textsearch/json"
+                  parameters:params
+                     success:success
+                     failure:fail];
+    });
+   
+}
+
+- (void)getPhotoOfPlaceWithPhotoReference:(NSString *)photoReference
+                                  success:(PLCSuccessBlock)succeed
+                                  failure:(PLCFailureBlock)failure {
+    
+    NSDictionary *photoParams = @{
+                             @"key": PLCGoogleAPIKey,
+                             @"maxheight": @(98),
+                             @"photoreference":photoReference
+                             };
+    
+    void(^success)(AFHTTPRequestOperation *, id) =
+    ^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        UIImage *placeImage = (UIImage *)responseObject;
+        
+        if (succeed) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                succeed(placeImage);
+            });
         }
         
     };
@@ -65,11 +117,13 @@ NSString *const PLCGoogleAPIKey = @"AIzaSyBhpEhL8vvERVuY9ynrHuElB7kEKdWyiHI";
     void(^fail)(id, NSError *) = ^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
         NSLog(@"%@", error);
     };
-    
-    [self.requestManager GET:@"https://maps.googleapis.com/maps/api/place/nearbysearch/json"
-                  parameters:params
+    //Попытался решить ошибку с _BSMachError - не знаю, будет ли работать с этим, т.к. превысил количество запросов в день
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    [self.imageRequestManager GET:@"https://maps.googleapis.com/maps/api/place/photo"
+                  parameters:photoParams
                      success:success
                      failure:fail];
+    });
 }
 
 @end
